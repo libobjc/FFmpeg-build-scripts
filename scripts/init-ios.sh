@@ -17,12 +17,13 @@
 #
 
 # IJK_FFMPEG_UPSTREAM=git://git.videolan.org/ffmpeg.git
-IJK_FFMPEG_UPSTREAM=https://github.com/Bilibili/FFmpeg.git
-IJK_FFMPEG_FORK=https://github.com/Bilibili/FFmpeg.git
-IJK_FFMPEG_COMMIT=ff3.4--ijk0.8.7--20180103--001
-IJK_FFMPEG_LOCAL_REPO=extra/ffmpeg
+IJK_FFMPEG_UPSTREAM=https://github.com/FFmpeg/FFmpeg.git
+IJK_FFMPEG_FORK=https://github.com/FFmpeg/FFmpeg.git
+IJK_FFMPEG_COMMIT=n4.2
+IJK_FFMPEG_LOCAL_REPO=build/extra/ffmpeg
 
-IJK_GASP_UPSTREAM=https://github.com/Bilibili/gas-preprocessor.git
+IJK_GASP_UPSTREAM=https://github.com/libav/gas-preprocessor.git
+IJK_GASP_LOCAL_REPO=build/extra/gas-preprocessor
 
 # gas-preprocessor backup
 # https://github.com/Bilibili/gas-preprocessor.git
@@ -37,7 +38,6 @@ if [ "$IJK_GASP_REPO_URL" != "" ]; then
 fi
 
 set -e
-TOOLS=tools
 
 FF_ALL_ARCHS_IOS6_SDK="armv7 armv7s i386"
 FF_ALL_ARCHS_IOS7_SDK="armv7 armv7s arm64 i386 x86_64"
@@ -52,17 +52,17 @@ function echo_ffmpeg_version() {
 function pull_common() {
     git --version
     echo "== pull gas-preprocessor base =="
-    sh $TOOLS/pull-repo-base.sh $IJK_GASP_UPSTREAM extra/gas-preprocessor
+    sh scripts/pull-repo-base.sh $IJK_GASP_UPSTREAM $IJK_GASP_LOCAL_REPO
 
     echo "== pull ffmpeg base =="
-    sh $TOOLS/pull-repo-base.sh $IJK_FFMPEG_UPSTREAM $IJK_FFMPEG_LOCAL_REPO
+    sh scripts/pull-repo-base.sh $IJK_FFMPEG_UPSTREAM $IJK_FFMPEG_LOCAL_REPO
 }
 
 function pull_fork() {
     echo "== pull ffmpeg fork $1 =="
-    sh $TOOLS/pull-repo-ref.sh $IJK_FFMPEG_FORK ios/ffmpeg-$1 ${IJK_FFMPEG_LOCAL_REPO}
-    cd ios/ffmpeg-$1
-    git checkout ${IJK_FFMPEG_COMMIT} -B ijkplayer
+    sh scripts/pull-repo-ref.sh $IJK_FFMPEG_FORK build/source/ffmpeg-$1 ${IJK_FFMPEG_LOCAL_REPO}
+    cd build/source/ffmpeg-$1
+    git checkout ${IJK_FFMPEG_COMMIT} -B SGPlayer
     cd -
 }
 
@@ -73,16 +73,12 @@ function pull_fork_all() {
     done
 }
 
-function sync_ff_version() {
-    sed -i '' "s/static const char \*kIJKFFRequiredFFmpegVersion\ \=\ .*/static const char *kIJKFFRequiredFFmpegVersion = \"${IJK_FFMPEG_COMMIT}\";/g" ios/IJKMediaPlayer/IJKMediaPlayer/IJKFFMoviePlayerController.m
-}
-
 #----------
 case "$FF_TARGET" in
     ffmpeg-version)
         echo_ffmpeg_version
     ;;
-    armv7|armv7s|arm64|i386|x86_64)
+    armv7|arm64|i386|x86_64)
         pull_common
         pull_fork $FF_TARGET
     ;;
@@ -91,6 +87,4 @@ case "$FF_TARGET" in
         pull_fork_all
     ;;
 esac
-
-sync_ff_version
 

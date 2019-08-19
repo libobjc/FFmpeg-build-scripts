@@ -44,13 +44,13 @@ if [ -z "$FF_ARCH" ]; then
 fi
 
 
-FF_BUILD_ROOT=`pwd`
+FF_BUILD_ROOT=`pwd`/build
 FF_TAGET_OS="darwin"
 
 
 # ffmpeg build params
 export COMMON_FF_CFG_FLAGS=
-source $FF_BUILD_ROOT/../config/module.sh
+source scripts/module.sh
 
 FFMPEG_CFG_FLAGS=
 FFMPEG_CFG_FLAGS="$FFMPEG_CFG_FLAGS $COMMON_FF_CFG_FLAGS"
@@ -104,7 +104,7 @@ echo "build_root: $FF_BUILD_ROOT"
 echo "===================="
 echo "[*] check gas-preprocessor"
 echo "===================="
-FF_TOOLS_ROOT="$FF_BUILD_ROOT/../extra"
+FF_TOOLS_ROOT="$FF_BUILD_ROOT/extra"
 export PATH="$FF_TOOLS_ROOT/gas-preprocessor:$PATH"
 
 echo "gasp: $FF_TOOLS_ROOT/gas-preprocessor/gas-preprocessor.pl"
@@ -126,18 +126,18 @@ if [ "$FF_ARCH" = "i386" ]; then
     FF_BUILD_NAME="ffmpeg-i386"
     FF_BUILD_NAME_OPENSSL=openssl-i386
     FF_XCRUN_PLATFORM="iPhoneSimulator"
-    FF_XCRUN_OSVERSION="-mios-simulator-version-min=6.0"
+    FF_XCRUN_OSVERSION="-mios-simulator-version-min=8.0"
     FFMPEG_CFG_FLAGS="$FFMPEG_CFG_FLAGS $FFMPEG_CFG_FLAGS_SIMULATOR"
 elif [ "$FF_ARCH" = "x86_64" ]; then
     FF_BUILD_NAME="ffmpeg-x86_64"
     FF_BUILD_NAME_OPENSSL=openssl-x86_64
     FF_XCRUN_PLATFORM="iPhoneSimulator"
-    FF_XCRUN_OSVERSION="-mios-simulator-version-min=7.0"
+    FF_XCRUN_OSVERSION="-mios-simulator-version-min=8.0"
     FFMPEG_CFG_FLAGS="$FFMPEG_CFG_FLAGS $FFMPEG_CFG_FLAGS_SIMULATOR"
 elif [ "$FF_ARCH" = "armv7" ]; then
     FF_BUILD_NAME="ffmpeg-armv7"
     FF_BUILD_NAME_OPENSSL=openssl-armv7
-    FF_XCRUN_OSVERSION="-miphoneos-version-min=6.0"
+    FF_XCRUN_OSVERSION="-miphoneos-version-min=8.0"
     FF_XCODE_BITCODE="-fembed-bitcode"
     FFMPEG_CFG_FLAGS="$FFMPEG_CFG_FLAGS $FFMPEG_CFG_FLAGS_ARM"
 #    FFMPEG_CFG_CPU="--cpu=cortex-a8"
@@ -145,13 +145,13 @@ elif [ "$FF_ARCH" = "armv7s" ]; then
     FF_BUILD_NAME="ffmpeg-armv7s"
     FF_BUILD_NAME_OPENSSL=openssl-armv7s
     FFMPEG_CFG_CPU="--cpu=swift"
-    FF_XCRUN_OSVERSION="-miphoneos-version-min=6.0"
+    FF_XCRUN_OSVERSION="-miphoneos-version-min=8.0"
     FF_XCODE_BITCODE="-fembed-bitcode"
     FFMPEG_CFG_FLAGS="$FFMPEG_CFG_FLAGS $FFMPEG_CFG_FLAGS_ARM"
 elif [ "$FF_ARCH" = "arm64" ]; then
     FF_BUILD_NAME="ffmpeg-arm64"
     FF_BUILD_NAME_OPENSSL=openssl-arm64
-    FF_XCRUN_OSVERSION="-miphoneos-version-min=7.0"
+    FF_XCRUN_OSVERSION="-miphoneos-version-min=8.0"
     FF_XCODE_BITCODE="-fembed-bitcode"
     FFMPEG_CFG_FLAGS="$FFMPEG_CFG_FLAGS $FFMPEG_CFG_FLAGS_ARM"
     FF_GASPP_EXPORT="GASPP_FIX_XCODE5=1"
@@ -169,7 +169,7 @@ echo "===================="
 echo "[*] make ios toolchain $FF_BUILD_NAME"
 echo "===================="
 
-FF_BUILD_SOURCE="$FF_BUILD_ROOT/$FF_BUILD_NAME"
+FF_BUILD_SOURCE="$FF_BUILD_ROOT/source/$FF_BUILD_NAME"
 FF_BUILD_PREFIX="$FF_BUILD_ROOT/build/$FF_BUILD_NAME/output"
 
 FFMPEG_CFG_FLAGS="$FFMPEG_CFG_FLAGS --prefix=$FF_BUILD_PREFIX"

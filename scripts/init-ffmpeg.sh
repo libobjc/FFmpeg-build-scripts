@@ -16,41 +16,24 @@
 # limitations under the License.
 #
 
-# IJK_FFMPEG_UPSTREAM=git://git.videolan.org/ffmpeg.git
 IJK_FFMPEG_UPSTREAM=https://github.com/FFmpeg/FFmpeg.git
 IJK_FFMPEG_FORK=https://github.com/FFmpeg/FFmpeg.git
-IJK_FFMPEG_COMMIT=n4.2
+IJK_FFMPEG_COMMIT=$2
 IJK_FFMPEG_LOCAL_REPO=build/extra/ffmpeg
 
 IJK_GASP_UPSTREAM=https://github.com/libav/gas-preprocessor.git
 IJK_GASP_LOCAL_REPO=build/extra/gas-preprocessor
 
-# gas-preprocessor backup
-# https://github.com/Bilibili/gas-preprocessor.git
-
-if [ "$IJK_FFMPEG_REPO_URL" != "" ]; then
-    IJK_FFMPEG_UPSTREAM=$IJK_FFMPEG_REPO_URL
-    IJK_FFMPEG_FORK=$IJK_FFMPEG_REPO_URL
-fi
-
-if [ "$IJK_GASP_REPO_URL" != "" ]; then
-    IJK_GASP_UPSTREAM=$IJK_GASP_REPO_URL
-fi
-
 set -e
 
-FF_ALL_ARCHS_IOS6_SDK="armv7 armv7s i386"
-FF_ALL_ARCHS_IOS7_SDK="armv7 armv7s arm64 i386 x86_64"
-FF_ALL_ARCHS_IOS8_SDK="armv7 arm64 i386 x86_64"
-FF_ALL_ARCHS=$FF_ALL_ARCHS_IOS8_SDK
-FF_TARGET=$1
+FF_ALL_ARCHS=
+FF_ALL_ARCHS_IOS="armv7 arm64 i386 x86_64"
+FF_ALL_ARCHS_TVOS="arm64 x86_64"
+FF_ALL_ARCHS_MACOS="x86_64"
 
-function echo_ffmpeg_version() {
-    echo $IJK_FFMPEG_COMMIT
-}
+FF_PLATFORM=$1
 
 function pull_common() {
-    git --version
     echo "== pull gas-preprocessor base =="
     sh scripts/pull-repo-base.sh $IJK_GASP_UPSTREAM $IJK_GASP_LOCAL_REPO
 
@@ -60,8 +43,8 @@ function pull_common() {
 
 function pull_fork() {
     echo "== pull ffmpeg fork $1 =="
-    sh scripts/pull-repo-ref.sh $IJK_FFMPEG_FORK build/source/ffmpeg-$1 ${IJK_FFMPEG_LOCAL_REPO}
-    cd build/source/ffmpeg-$1
+    sh scripts/pull-repo-ref.sh $IJK_FFMPEG_FORK build/source/$FF_PLATFORM/ffmpeg-$1 ${IJK_FFMPEG_LOCAL_REPO}
+    cd build/source/$FF_PLATFORM/ffmpeg-$1
     git checkout ${IJK_FFMPEG_COMMIT} -B SGPlayer
     cd -
 }
@@ -74,17 +57,17 @@ function pull_fork_all() {
 }
 
 #----------
-case "$FF_TARGET" in
-    ffmpeg-version)
-        echo_ffmpeg_version
-    ;;
-    armv7|arm64|i386|x86_64)
-        pull_common
-        pull_fork $FF_TARGET
-    ;;
-    all|*)
-        pull_common
-        pull_fork_all
-    ;;
-esac
+if [ "$FF_PLATFORM" = "iOS" ]; then
+    FF_ALL_ARCHS=$FF_ALL_ARCHS_IOS
+elif [ "$FF_PLATFORM" = "tvOS" ]; then
+    FF_ALL_ARCHS=$FF_ALL_ARCHS_TVOS
+elif [ "$FF_PLATFORM" = "macOS" ]; then
+    FF_ALL_ARCHS=$FF_ALL_ARCHS_MACOS
+else
+    echo "You must specific an platform 'iOS, tvOS, macOS'.\n"
+    exit 1
+fi
+
+pull_common
+pull_fork_all
 

@@ -7,9 +7,9 @@
 	objects = {
 
 /* Begin PBXFileReference section */
-		9C7E6457230A9E2B0041F94A /* init-ios.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "init-ios.sh"; sourceTree = "<group>"; };
+		9C7E6457230A9E2B0041F94A /* init-ffmpeg.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "init-ffmpeg.sh"; sourceTree = "<group>"; };
 		9C7E6458230A9E2B0041F94A /* do-compile-openssl.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "do-compile-openssl.sh"; sourceTree = "<group>"; };
-		9C7E6459230A9E2B0041F94A /* init-ios-openssl.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "init-ios-openssl.sh"; sourceTree = "<group>"; };
+		9C7E6459230A9E2B0041F94A /* init-openssl.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "init-openssl.sh"; sourceTree = "<group>"; };
 		9C7E645A230A9E2B0041F94A /* module.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = module.sh; sourceTree = "<group>"; };
 		9C7E645B230A9E2B0041F94A /* do-compile-ffmpeg.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "do-compile-ffmpeg.sh"; sourceTree = "<group>"; };
 		9C7E645C230A9E2B0041F94A /* compile-openssl.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "compile-openssl.sh"; sourceTree = "<group>"; };
@@ -35,8 +35,8 @@
 				9C7E645C230A9E2B0041F94A /* compile-openssl.sh */,
 				9C7E645B230A9E2B0041F94A /* do-compile-ffmpeg.sh */,
 				9C7E6458230A9E2B0041F94A /* do-compile-openssl.sh */,
-				9C7E6459230A9E2B0041F94A /* init-ios-openssl.sh */,
-				9C7E6457230A9E2B0041F94A /* init-ios.sh */,
+				9C7E6457230A9E2B0041F94A /* init-ffmpeg.sh */,
+				9C7E6459230A9E2B0041F94A /* init-openssl.sh */,
 				9C7E645A230A9E2B0041F94A /* module.sh */,
 				9C7E645D230A9E2B0041F94A /* pull-repo-base.sh */,
 				9C7E645E230A9E2B0041F94A /* pull-repo-ref.sh */,
